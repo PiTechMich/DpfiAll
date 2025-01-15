@@ -1,0 +1,120 @@
+{% extends 'index.html' %}
+
+{% block picontent %}
+<form method="post">
+    {% csrf_token %}
+    
+    <!-- Province -->
+    <label for="province">Province:</label>
+    <select id="province" name="province">
+        <option value="">Sélectionnez une province</option>
+        {% for province in provinces %}
+            <option value="{{ province.id }}">{{ province.name }}</option>
+        {% endfor %}
+    </select>
+
+    <label for="etat">Etat :</label>
+    <select id="etat" name="etat">
+        <option value="">--All--</option>
+        <option value="Achevée">Travaux Achevée</option>
+        <option value="N_Achevée">Travaux Non Achévée</option>
+    </select>
+
+    <label for="financement">Financement :</label>
+    <select id="financement" name="financement">
+        <option value="">--All--</option>
+        <option value="RPI">RPI</option>
+        <option value="PAEB">PAEB</option>
+    </select>
+
+    <button type="submit">Soumettre</button>
+</form>
+<h1>Liste des Sites</h1>
+    {%if avancements%}
+    <h6>Requetes faits : </h6>
+    <p><b>Provinces : </b>{{provinceR}}</p>
+    <p><b>Etat : </b>{{etatReq}}</p>
+    <p><b>Financement : </b>{{financR}}</p>
+    <!-- Table des résultats -->
+    <table id="siteTable" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>N°</th>
+                <th>ID</th>
+                <th>Region</th>
+                <th>District</th>
+                <th>Objet du Site</th>
+                <th>Nom de l'Etablissement</th>
+                <th>Financement / OS</th>
+                <th>Avancements</th>
+                <th>Etat</th>
+                <th>Batiments / Travaux</th>
+                <th>Photo</th>
+                <th>Action Avancements</th>
+                <th>Action Sites</th>
+                <th>Action Marchés</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for avancement in results %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{ avancement.site.site.id }}</td>
+                    <td>{{ avancement.site.site.commune.district.region.name }}</td>
+                    <td>{{ avancement.site.site.commune.district.name }}</td>
+                    <td>{{ avancement.site.site.objet }}</td>
+                    <td>{{ avancement.site.site.nomEtab }}</td>
+                    <td>{{ avancement.latest_marche.financement }} / {{ avancement.latest_marche.os }}</td>
+                    <td>{{ avancement.site.avancement }}%</td>
+                    <td>{{ avancement.site.etat }}</td>
+                    <td>{{ avancement.latest_marche.travaux }}/ {{ avancement.latest_marche.batiment }}</td>
+                    <td>{% if avancement.latest_avancement.photo1 %}<img src="{{ avancement.latest_avancement.photo1.url }}" width="50">{% endif %}
+                        {% if avancement.latest_avancement.photo2 %}<img src="{{ avancement.latest_avancement.photo2.url }}" width="50">{% endif %}
+                        {% if avancement.latest_avancement.photo3 %}<img src="{{ avancement.latest_avancement.photo3.url }}" width="50">{% endif %}
+                        {% if avancement.latest_avancement.photo4 %}<img src="{{ avancement.latest_avancement.photo4.url }}" width="50">{% endif %}</td>
+                    <td> <a href="/avancement/view/{{avancement.site.site.id}}" class="btn btn-info btn-sm">Voir Avan</a>
+                        <a href="/avancement/edit/{{avancement.site.site.id}}" class="btn btn-warning btn-sm">Modifier Avan</a>
+                        <a href="/avancement/add/{{avancement.site.site.id}}" class="btn btn-success btn-sm">Ajouter Avan</a>
+                    </td>
+                    <td>
+                        <a href="/site/edit/{{avancement.site.site.id}}" class="btn btn-warning btn-sm">Modifier Site</a></td>
+                    <td>
+                        <a href="/marche/view/{{avancement.site.site.id}}" class="btn btn-info btn-sm">Voir Marche</a>
+                        <a href="/marche/edit/{{avancement.site.site.id}}" class="btn btn-warning btn-sm">Modifier Marche</a>
+                        <a href="/marche/add/{{avancement.site.site.id}}" class="btn btn-success btn-sm">Ajouter Marche</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'generationpdf' %}" class="btn btn-primary">Télécharger le PDF</a>
+    <a href="{% url 'export-excel' %}" class="btn btn-primary">Télécharger Tous les Constructions en Excel</a>
+{%endif%}
+<!-- Scripts -->
+<script>
+    $(document).ready(function () {
+        $('#siteTable').DataTable({
+            "paging": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "pageLength": 10,
+            "language": {
+                "lengthMenu": "Afficher _MENU_ enregistrements par page",
+                "zeroRecords": "Aucun résultat trouvé",
+                "info": "Affichage de _START_ à _END_ sur _TOTAL_ enregistrements",
+                "infoEmpty": "Aucun enregistrement disponible",
+                "infoFiltered": "(filtré à partir de _MAX_ enregistrements au total)",
+                "search": "Rechercher :",
+                "paginate": {
+                    "first": "Premier",
+                    "last": "Dernier",
+                    "next": "Suivant",
+                    "previous": "Précédent"
+                }
+            }
+        });
+    });
+</script>
+
+{% endblock %}

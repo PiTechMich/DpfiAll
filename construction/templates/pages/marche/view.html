@@ -1,0 +1,53 @@
+{% extends 'index.html' %}
+
+{% block picontent %}
+<h1>Détail Marché our le site : {{ site.nomEtab }}</h1>
+<h6>Objet : {{ site.objet }}</h6>
+<h6>Localite -- Region : {{ site.commune.district.region.name }} -- District : {{ site.commune.district.name }} -- Commune {{ site.commune.name }}</h6>
+<h4>Avancement</h4>
+<h6>{{ avancement.etat }}</h6>
+<h6>{{ avancement.avancement }}%</h6>
+<h6>{{ avancement.observation }}</h6>
+<table>
+    <td>
+        {% if avancement.photo1 %}<img src="{{ avancement.photo1.url }}" width="50">{% endif %}
+    </td>
+    <td>
+        {% if avancement.photo2 %}<img src="{{ avancement.photo2.url }}" width="50">{% endif %}
+    </td>
+    <td>
+        {% if avancement.photo3 %}<img src="{{ avancement.photo3.url }}" width="50">{% endif %}
+    <td>
+        {% if avancement.photo4 %}<img src="{{ avancement.photo4.url }}" width="50">{% endif %}
+    </td>
+</table>
+<table class="table table-bordered border-primary">
+    <thead>
+        <tr>
+            <th>Numéro Marché </th>
+            <th>Nombre de Salles </th>
+            <th>Batiments</th>
+            <th>Travaux</th>
+            <th>Financement</th>
+            <th>OS</th>
+            <th>Titulaire</th>
+            <th>Delai d'Exécution</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for marche in marches %}
+        <tr>
+            <td>{{ marche.numMarche }}</td>
+            <td>{{ marche.NbSalle }}</td>
+            <td>{{ marche.batiment }}</td>
+            <td>{{ marche.travaux }}</td>
+            <td>{{ marche.financement }}</td>
+            <td>{{ marche.os }}</td>
+            <td>{{ marche.Titulaire }} {{ marche.numTitulaire }}</td>
+            <td>{{ marche.delaiEx }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'add_marche' site.id %}" class="btn btn-success">Ajouter Marche</a>
+{% endblock %}

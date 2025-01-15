@@ -1,0 +1,338 @@
+{% extends 'index.html' %}
+
+{% block picontent %}
+<form method="post">
+    {% csrf_token %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Filtre pour Des Stats</h1>
+        
+        <!-- Grille Bootstrap -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <!-- Case 1 -->
+            
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#provinces">
+                Provinces
+              </button>
+            </div>
+            <!-- Case 2 -->
+            
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#regions">
+                Régions
+              </button>
+            </div>
+            <!-- Case 3 -->
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#districts">
+                Districts
+              </button>
+            </div>
+
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#nbsalles">
+                Nbre de Salles
+              </button>
+            </div>
+
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#batiments">
+                Batiments
+              </button>
+            </div>
+
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#travaux">
+                Travaux
+              </button>
+            </div>
+
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#financements">
+                Financements
+              </button>
+            </div>
+
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#types">
+                Types
+              </button>
+            </div>
+
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#os">
+                OS
+              </button>
+            </div>
+
+            <div class="col">
+              <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#etats">
+                Etats
+              </button>
+            </div>
+
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <!-- Case 4 -->
+            
+            <!-- Case 6 -->
+        
+
+        </div>
+    </div>
+
+<!-- Provinces -->
+<div class="modal fade" id="provinces" tabindex="-1" aria-labelledby="modalScrollableLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalScrollableLabel">Provinces</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Contenu long -->
+              <div class="btn-group-vertical" role="group" aria-label="Vertical checkbox toggle button group">
+                  {% for avancement in provinces %}
+                  <input type="checkbox" name="{{avancement.id}}"class="btn-check" id="{{avancement.id}}" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="{{avancement.id}}">{{avancement.name}}</label>
+                  {% endfor %}
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Régions -->
+<div class="modal fade" id="regions" tabindex="-1" aria-labelledby="modalScrollableLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalScrollableLabel">Régions</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Contenu long -->
+              <div class="btn-group-vertical" role="group" aria-label="Vertical checkbox toggle button group">
+                  {% for avancement in regions %}
+                    <input type="checkbox" name="{{avancement.id}}"class="btn-check" id="{{avancement.id}}" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="{{avancement.id}}">{{avancement.name}}</label>
+                    {% endfor %}
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Districts -->
+<div class="modal fade" id="districts" tabindex="-1" aria-labelledby="modalScrollableLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalScrollableLabel">Districts</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Contenu long -->
+              <div class="btn-group-vertical" role="group" aria-label="Vertical checkbox toggle button group">
+                {% for avancement in districts %}
+                <input type="checkbox" name="{{avancement.id}}"class="btn-check" id="{{avancement.id}}" autocomplete="off">
+                <label class="btn btn-outline-primary" for="{{avancement.id}}">{{avancement.name}}</label>
+                {% endfor %}
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Nbre de Salles -->
+<div class="modal fade" id="nbsalles" tabindex="-1" aria-labelledby="modalScrollableLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalScrollableLabel">Nbre Salles</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Contenu long -->
+              <div class="btn-group-vertical" role="group" aria-label="Vertical checkbox toggle button group">
+                {% for avancement in nbrsalles %}
+                <input type="checkbox" name="{{avancement.NbSalle}}"class="btn-check" id="{{avancement.NbSalle}}" autocomplete="off">
+                <label class="btn btn-outline-primary" for="{{avancement.NbSalle}}">{{avancement.NbSalle}}</label>
+                {% endfor %}
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Batiments -->
+<div class="modal fade" id="batiments" tabindex="-1" aria-labelledby="modalScrollableLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalScrollableLabel">Nbre Salles</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Contenu long -->
+              <div class="btn-group-vertical" role="group" aria-label="Vertical checkbox toggle button group">
+                {% for bat in batiments%}
+                        <input type="checkbox" class="btn-check" id="{{bat.batiment}}" value="{{bat.batiment}}" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="{{bat.batiment}}">{{bat.batiment}}</label>
+                {%endfor%}
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<!-- Travaux -->
+<div class="modal fade" id="travaux" tabindex="-1" aria-labelledby="modalScrollableLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalScrollableLabel">Nbre Salles</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Contenu long -->
+              <div class="btn-group-vertical" role="group" aria-label="Vertical checkbox toggle button group">
+                {% for bat in travaux%}
+                <input type="checkbox" class="btn-check" id="{{bat.travaux}}" value="{{bat.travaux}}" autocomplete="off">
+                <label class="btn btn-outline-primary" for="{{bat.travaux}}">{{bat.travaux}}</label>
+                {%endfor%}
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+
+<!-- Financements -->
+<div class="modal fade" id="financements" tabindex="-1" aria-labelledby="modalScrollableLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalScrollableLabel">Financements</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Contenu long -->
+              <div class="btn-group-vertical" role="group" aria-label="Vertical checkbox toggle button group">
+                {% for bat in financement%}
+                  <input type="checkbox" class="btn-check" id="{{bat.financement}}" value="{{bat.financement}}" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="{{bat.financement}}">{{bat.financement}}</label>
+                {%endfor%}
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Types -->
+<div class="modal fade" id="types" tabindex="-1" aria-labelledby="modalScrollableLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalScrollableLabel">Types</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Contenu long -->
+              <div class="btn-group-vertical" role="group" aria-label="Vertical checkbox toggle button group">
+                {% for bat in types%}
+                          <input type="checkbox" class="btn-check" id="{{bat.TypeEtab}}" value="{{bat.TypeEtab}}" autocomplete="off">
+                          <label class="btn btn-outline-primary" for="{{bat.TypeEtab}}">{{bat.TypeEtab}}</label>
+                {%endfor%}
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- OS -->
+<div class="modal fade" id="os" tabindex="-1" aria-labelledby="modalScrollableLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalScrollableLabel">OS</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Contenu long -->
+              <div class="btn-group-vertical" role="group" aria-label="Vertical checkbox toggle button group">
+                {% for bat in os%}
+                    <input type="checkbox" class="btn-check" id="{{bat.os}}" value="{{bat.os}}" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="{{bat.os}}">{{bat.os}}</label>
+                {%endfor%}
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<!-- Etats -->
+<div class="modal fade" id="etats" tabindex="-1" aria-labelledby="modalScrollableLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h5 class="modal-title" id="modalScrollableLabel">Etats</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <!-- Contenu long -->
+              <div class="btn-group-vertical" role="group" aria-label="Vertical checkbox toggle button group">
+                {% for bat in etats%}
+                  <input type="checkbox" class="btn-check" id="{{bat.etat}}" value="{{bat.etat}}" autocomplete="off">
+                  <label class="btn btn-outline-primary" for="{{bat.etat}}">{{bat.etat}}</label>
+                {%endfor%}
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              <button type="button" class="btn btn-primary">Sauvegarder</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+</form>
+
+{% endblock %}

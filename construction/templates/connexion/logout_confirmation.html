@@ -1,0 +1,12 @@
+
+{% extends 'index.html' %}
+
+{% block picontent %}
+
+<h1>Voulez-vous vraiment vous déconnecter ?</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Oui, me déconnecter</button>
+        <a href="/">Annuler</a>
+    </form>
+{% endblock %}

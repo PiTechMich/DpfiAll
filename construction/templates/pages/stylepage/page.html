@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projet EPP Analamahitsy</title>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">EPP sis ANALAMAHITSY</h1>
+
+        <!-- Description du projet -->
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="h5">I. DESCRIPTION DU PROJET</h2>
+            </div>
+            <div class="card-body">
+                <p><strong>Objet du marché :</strong> {{ project.objet }}</p>
+                <p><strong>Titulaire des Travaux :</strong> {{ project.titulaire }}</p>
+                <p><strong>Année d’Attribution :</strong> {{ project.annee }}</p>
+                <p><strong>Delai d’exécution :</strong> {{ project.delai }}</p>
+            </div>
+        </div>
+
+        <!-- Constatation des travaux -->
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h2 class="h5">II. CONSTATATION DES TRAVAUX</h2>
+            </div>
+            <div class="card-body">
+                <p><strong>Observation :</strong> {{ travaux.observation }}</p>
+                <p><strong>Avancement :</strong> {{ travaux.avancement }}%</p>
+                <p><strong>Travaux restants :</strong> {{ travaux.restants }}</p>
+            </div>
+        </div>
+
+        <!-- Images Section -->
+        <div class="row row-cols-2 g-3 text-center">
+            {% for image in images %}
+            <div class="col">
+                <img src="{{ image }}" alt="Image" class="img-fluid" style="width: 100%; height: auto;">
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

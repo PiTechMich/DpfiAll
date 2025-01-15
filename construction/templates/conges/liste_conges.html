@@ -1,0 +1,72 @@
+{% extends 'index.html' %}
+
+{% block picontent %}
+<h2>Liste des Congés</h2>
+
+    <!-- Table pour les congés -->
+    <table id="table_conge" class="table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>Nom de l'employé</th>
+                <th>Type de congé</th>
+                <th>Année</th>
+                <th>Date de début</th>
+                <th>Date de fin</th>
+                <th>Durée</th>
+                <th>Statut</th>
+                <th>Justification</th>
+                <th>Fichier justificatif</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for conge in conges %}
+            <tr>
+                <td>{{ conge.utilisateur.nom }} {{ conge.utilisateur.prenom }}</td>
+                <td>{{ conge.type_conge.nom }}</td>
+                <td>{{ conge.annee }}</td>
+                <td>{{ conge.date_debut }}</td>
+                <td>{{ conge.date_fin }}</td>
+                <td>{{ conge.duree }} jours</td>
+                <td>
+                    {% if conge.statut != 'approuve' %}
+                    <form method="post" action="{% url 'modifier_statut_conge' conge.id %}">
+                        {% csrf_token %}
+                        <select name="statut">
+                            <option value="en_attente" {% if conge.statut == 'en_attente' %}selected{% endif %}>En attente</option>
+                            <option value="approuve" {% if conge.statut == 'approuve' %}selected{% endif %}>Approuvé</option>
+                            <option value="rejete" {% if conge.statut == 'rejete' %}selected{% endif %}>Rejeté</option>
+                        </select>
+                        <button type="submit">Modifier</button>
+                    </form>
+                    {% else%}
+                        {{ conge.statut }}
+                    {% endif %}
+
+                </td>
+                <td>{{ conge.justification }}</td>
+                <td>
+                    {% if conge.fond %}
+                        <a href="{{ conge.fond.url }}" target="_blank">Voir le fichier</a>
+                    {% else %}
+                        Aucun fichier
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="9">Aucun congé trouvé.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        $(document).ready(function() {
+            $('#table_conge').DataTable({
+                "paging": true,  // Activer la pagination
+                "searching": true,  // Activer la recherche
+                "ordering": true,  // Activer le tri
+                "info": true  // Afficher des informations sur le nombre d'entrées
+            });
+        });
+    </script>
+{% endblock %}

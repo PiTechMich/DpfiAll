@@ -1,0 +1,10 @@
+{% extends 'index.html' %}
+
+{% block picontent %}
+  <h2>Importer des données SITE depuis un fichier Excel</h2>
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Importer</button>
+  </form>
+{% endblock %}

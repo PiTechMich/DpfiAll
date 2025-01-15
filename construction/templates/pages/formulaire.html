@@ -1,0 +1,222 @@
+
+{% extends 'index.html' %}
+
+{% block picontent %}
+    <form method="post">
+        {% csrf_token %}
+        
+        <!-- Province -->
+        <label for="province">Province:</label>
+        <select id="province" name="province">
+            <option value="">Sélectionnez une province</option>
+            {% for province in provinces %}
+                <option value="{{ province.id }}">{{ province.name }}</option>
+            {% endfor %}
+        </select>
+
+        <!-- Région -->
+        <label for="region">Région:</label>
+        <select id="region" name="region">
+            <option value="">Sélectionnez une région</option>
+        </select>
+
+        <!-- District -->
+        <label for="district">District:</label>
+        <select id="district" name="district">
+            <option value="">Sélectionnez un district</option>
+        </select>
+        <!-- Tableau des Sites -->
+        <table id="site-table" class="table table-striped table-bordered table-hover" style="width:100%">
+            <thead class="table-light">
+                <tr>
+                    <th>ID</th>
+                    <th>Région</th>
+                    <th>District</th>
+                    <th>Commune</th>
+                    <th>Fokontany</th>
+                    <th>Objet</th>
+                    <th>Nom Établissement</th>
+                    <th>Nbre de Salles</th>
+                    <th>Titulaire</th>
+                    <th>Batiment/ Travaux</th>
+                    <th>Financement / OS</th>
+                    <th>Avancement</th>
+                    <th>État</th>
+                    <th>ActionsAvancement</th>
+                    <th>ActionsMarche</th>
+                    <th>ActionsSite</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for avancement in resultats %}
+                <tr>
+                    <td>{{forloop.counter}}</td>
+                    <td>{{ avancement.site.commune.district.region.name }}</td>
+                    <td>{{ avancement.site.commune.district.name }}</td>
+                    <td>{{ avancement.site.commune.name }}</td>
+                    <td>{{ avancement.site.fokontany }}</td>
+                    <td>{{ avancement.site.objet }}</td>
+                    <td>{{ avancement.site.nomEtab }}</td>
+                    <td>{{ avancement.latest_marche.NbSalle }}</td>
+                    <td>{{ avancement.latest_marche.Titulaire }}</td>
+                    <td>{{ avancement.latest_marche.batiment }} / {{ avancement.latest_marche.travaux }}</td>
+                    <td>{{ avancement.latest_marche.financement }} / {{ avancement.latest_marche.travaux }}</td>
+                    <td>{{ avancement.latest_avancement.avancement }}%</td>
+                    <td>{{ avancement.latest_avancement.etat }}</td>
+                   <td><a href="/avancement/view/{{avancement.site.id}}" class="btn btn-info btn-sm">Voir</a>
+                        <a href="/avancement/edit/{{avancement.site.id}}" class="btn btn-warning btn-sm">Modifier</a>
+                        <a href="/avancement/add/{{avancement.site.id}}" class="btn btn-success btn-sm">Ajouter</a>
+                    </td>
+                    <td><a href="/marche/view/{{avancement.site.id}}" class="btn btn-info btn-sm">VoirMarche</a>
+                            <a href="/marche/edit/{{avancement.site.id}}" class="btn btn-warning btn-sm">ModifierMarche</a>
+                            <a href="/marche/add/{{avancement.site.id}}" class="btn btn-success btn-sm">AjouterMarche</a>
+                    </td>
+                    <td>
+                        <a href="/site/edit/{{avancement.site.id}}" class="btn btn-warning btn-sm">Modifier Site</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+<!-- Cartes des Sites -->
+<div id="site-card-container" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px;">
+    <!-- Les cartes seront affichées ici -->
+</div>
+        <button type="submit">Soumettre</button>
+    </form>
+
+    <script>
+    
+    $(document).ready(function () {
+        $('#province').change(function () {
+        let provinceId = $(this).val();
+        if (provinceId) {
+            $.ajax({
+                url: "{% url 'get_regions' %}",
+                data: {'province_id': provinceId},
+                success: function (data) {
+                    let regionDropdown = $('#region');
+                    regionDropdown.empty().append('<option value="">Sélectionnez une région</option>');
+                    $.each(data, function (key, region) {
+                        regionDropdown.append('<option value="' + region.id + '">' + region.name + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#region').empty().append('<option value="">Sélectionnez une région</option>');
+        }
+
+        $('#district').empty().append('<option value="">Sélectionnez un district</option>');
+    });
+
+    // Chargement des districts selon la région
+    $('#region').change(function () {
+        let regionId = $(this).val();
+        if (regionId) {
+            $.ajax({
+                url: "{% url 'get_districts' %}",
+                data: {'region_id': regionId},
+                success: function (data) {
+                    let districtDropdown = $('#district');
+                    districtDropdown.empty().append('<option value="">Sélectionnez un district</option>');
+                    $.each(data, function (key, district) {
+                        districtDropdown.append('<option value="' + district.id + '">' + district.name + '</option>');
+                    });
+                }
+            });
+        } else {
+            $('#district').empty().append('<option value="">Sélectionnez un district</option>');
+        }
+    });
+
+    let dataTable = $('#site-table').DataTable({
+        responsive: true,
+        autoWidth: false,
+        paging: true,
+        searching: true,
+        ordering: true,
+        info: true,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "Tout"]],
+        language: {
+            "lengthMenu": "Afficher _MENU_ entrées",
+            "zeroRecords": "Aucun site trouvé",
+            "info": "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+            "infoEmpty": "Aucune entrée disponible",
+            "infoFiltered": "(filtré à partir de _MAX_ entrées au total)",
+            "search": "Rechercher:",
+            "paginate": {
+                "first": "Premier",
+                "last": "Dernier",
+                "next": "Suivant",
+                "previous": "Précédent"
+            }
+        }
+    });
+
+    $('#district').change(function () {
+        let districtId = $(this).val();
+        dataTable.clear().draw(); // Effacer les données existantes
+
+        if (districtId) {
+            $.ajax({
+                url: "{% url 'get_sites' %}",
+                data: {'district_id': districtId},
+                success: function (data) {
+                    $.each(data, function (key, site) {
+                        let actionLinks = `
+                            <a href="/avancement/view/${site.id}" class="btn btn-info btn-sm">Voir</a>
+                            <a href="/avancement/edit/${site.id}" class="btn btn-warning btn-sm">Modifier</a>
+                            <a href="/avancement/add/${site.id}" class="btn btn-success btn-sm">Ajouter</a>
+                        `;
+                        let actionMarcheLinks = `
+                            <a href="/marche/view/${site.id}" class="btn btn-info btn-sm">Voir</a>
+                            <a href="/marche/edit/${site.id}" class="btn btn-warning btn-sm">Modifier</a>
+                            <a href="/marche/add/${site.id}" class="btn btn-success btn-sm">Ajouter</a>
+                        `;
+                        let actionSiteLinks = `
+                            <a href="/site/edit/${site.id}" class="btn btn-info btn-sm">Modifier</a>
+                            
+                        `;
+                        let titulaire = `
+                            <span>${site.titulaire}</span> <span>${site.num_titulaire}</span>
+                        `;
+                        let os_financement =`
+                            <span> <b>Financement : </b>${site.finan}</span><br/>
+                            <span><b>OS :</b> ${site.os}</span> 
+                        `;
+                        let bat_travaux =`
+                            <span><b>TYPE batiment :</b> ${site.bati}</span><br/>
+                            <span><b> Type de travaux : </b> ${site.travaux}</span> 
+                        `;
+                        dataTable.row.add([
+                            site.id,
+                            site.region,
+                            site.district,
+                            site.commune,
+                            site.fokontany,
+                            site.objet,
+                            site.nomEtab,
+                            site.Salle,
+                            titulaire,
+                            bat_travaux,
+                            os_financement,
+                            site.avancement,
+                            site.etat,
+                            actionLinks,
+                            actionMarcheLinks,
+                            actionSiteLinks
+                        ]).draw(false); // Ajoute les données au tableau
+                    });
+                },
+                error: function () {
+                    alert('Erreur lors du chargement des sites.');
+                }
+            });
+        }
+    });
+});
+
+
+    </script>
+{% endblock %}

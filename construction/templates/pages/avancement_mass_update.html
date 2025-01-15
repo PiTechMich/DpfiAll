@@ -1,0 +1,45 @@
+{% extends 'index.html' %}
+
+{% block picontent %}
+<h2>Mettre à jour l'avancement des travaux</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ formset.management_form }}
+    <table>
+        <thead>
+            <tr>
+                <th>Numéro</th>
+                <th>Nom du Site</th>
+                <th>État</th>
+                <th>Avancement (%)</th>
+                <th>Observation</th>
+                <th>Année d'Achèvement</th>
+                <th>Inaugurable</th>
+                <th>Niveau</th>
+                <th>Travaux Restants</th>
+                <th>Photos</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for form in formset %}
+            <tr>
+                <th scope="row">{{forloop.counter}}</th>
+                <td>{{ form.site.value |default_if_none:"" }}</td>
+                <td>{{ form.etat }}</td>
+                <td>{{ form.avancement }}</td>
+                <td>{{ form.observation }}</td>
+                <td>{{ form.annee_achevement }}</td>
+                <td>{{ form.inaugurable }}</td>
+                <td>{{ form.Niveau }}</td>
+                <td>{{ form.TravauxRestant }}</td>
+                <td>
+                    {{ form.photo1 }} {{ form.photo2 }} {{ form.photo3 }} {{ form.photo4 }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Enregistrer</button>
+</form>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'index.html' %}
+
+{% block picontent %}
+<h1>Avancements pour le site : {{ site.nomEtab }}</h1>
+<h6>Objet : {{ site.objet }}</h6>
+<h6>Localite -- Region : {{ site.commune.district.region.name }} -- District : {{ site.commune.district.name }} -- Commune {{ site.commune.name }}</h6>
+<h6>Numéro Marché :{{ marche.numMarche }}</h6>
+<h6>Batiments : {{ marche.batiment }}</h6>
+<h6>Travaux : {{ marche.travaux }}</h6>
+<h6>Financement : {{ marche.financement }}</h6>
+<h6>OS : {{ marche.os }}</h6>
+<h6>Titulaire : {{ marche.Titulaire }} {{ marche.numTitulaire }}</h6>
+<table>
+    <thead>
+        <tr>
+            <th>État</th>
+            <th>Avancement (%)</th>
+            <th>Observation</th>
+            <th>Photos</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for avancement in avancements %}
+        <tr>
+            <td>{{ avancement.etat }}</td>
+            <td>{{ avancement.avancement }}%</td>
+            <td>{{ avancement.observation }}</td>
+            <td>
+                {% if avancement.photo1 %}<img src="{{ avancement.photo1.url }}" width="50">{% endif %}
+                {% if avancement.photo2 %}<img src="{{ avancement.photo2.url }}" width="50">{% endif %}
+                {% if avancement.photo3 %}<img src="{{ avancement.photo3.url }}" width="50">{% endif %}
+                {% if avancement.photo4 %}<img src="{{ avancement.photo4.url }}" width="50">{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'add_avancement' site.id %}" class="btn btn-success">Ajouter Avancement</a>
+{% endblock %}

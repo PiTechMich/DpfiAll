@@ -1,0 +1,10 @@
+{% extends 'index.html' %}
+
+{% block picontent %}
+<h1>{% if form.instance.pk %}Modifier{% else %}Ajouter{% endif %} Marche</h1>
+<form action="" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-success" value="Enregistrer">
+</form>
+{% endblock %}

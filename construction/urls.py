@@ -1,0 +1,49 @@
+from django.urls import path,include, re_path
+from django.contrib.auth.views import LogoutView
+from . import views
+
+urlpatterns = [
+
+    path('test/', views.test, name='test'),
+    path('import/', views.import_data, name='import_data'),
+    path('importSite/', views.import_dataSite, name='importSite'),
+    path('importMarche/', views.import_dataMarche, name='importMarche'),
+    path('importAvancement/', views.import_dataAvancement, name='importAvancement'),
+    path('avancement/', views.avancement_mass_update, name='avancement_mass_update'),
+    path('export-excel/', views.export_to_excel, name='export-excel'),
+
+    #Formulaire Pour requete 
+    path('formulaire/', views.formulaire_view, name='formulaire'),
+    path('', views.formulaire_view, name='home'),
+    path('get_regions/', views.get_regions, name='get_regions'),
+    path('get_districts/', views.get_districts, name='get_districts'),
+    path('get_sites/', views.get_sites_by_district, name='get_sites'),
+    #Voir Information Avancement 
+    # URLs pour gérer les avancements
+    path('avancement/view/<int:site_id>/', views.view_avancement, name='view_avancement'),
+    path('avancement/edit/<int:site_id>/', views.edit_avancement, name='edit_avancement'),
+    path('avancement/add/<int:site_id>/', views.add_avancement, name='add_avancement'),
+
+    # URLs pour gérer les site
+    path('site/edit/<int:site_id>/', views.edit_site, name='edit_site'),
+    # Urls Marche
+    path('marche/view/<int:site_id>/', views.view_marche, name='view_marche'),
+    path('marche/edit/<int:site_id>/', views.edit_marche, name='edit_marche'),
+    path('marche/add/<int:site_id>/', views.add_marche, name='add_marche'),
+
+    #Rapport Génération
+    path('rapport/', views.rapport, name='rapport'),
+    #path('get_filtered_sites/', views.get_filtered_sites, name='get_filtered_sites'),
+    path('generationpdf/', views.generate_multi_pdf, name='generationpdf'),
+   
+    #Congé Personnel
+    path('demande_conge/', views.demande_conge, name='demande_conge'),
+    path('liste_conge/', views.liste_conges, name='liste_conge'),
+    path('modifier_statut_conge/<int:conge_id>/', views.modifier_statut_conge, name='modifier_statut_conge'),
+
+    path('filtre/', views.liste_constructions, name='filtre'),
+
+    path('login/', views.CustomLoginView.as_view(), name='login'),
+
+    path('logout/', views.logout_view, name='logout'),
+]
