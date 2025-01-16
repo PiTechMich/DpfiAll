@@ -23,13 +23,18 @@ urlpatterns = [
     path('avancement/view/<int:site_id>/', views.view_avancement, name='view_avancement'),
     path('avancement/edit/<int:site_id>/', views.edit_avancement, name='edit_avancement'),
     path('avancement/add/<int:site_id>/', views.add_avancement, name='add_avancement'),
-
+    path('avancementUni/edit/<int:avan_id>/<int:site_id>', views.edit_avan, name='edit_avan'),
+    path('avancementUni/delete/<int:avan_id>/<int:site_id>', views.delete_avan, name='delete_avan'),
+    path('avancementUni/deleteok/<int:avan_id>/<int:site_id>', views.delete_avanok, name='delete_avanok'),
     # URLs pour gérer les site
     path('site/edit/<int:site_id>/', views.edit_site, name='edit_site'),
     # Urls Marche
     path('marche/view/<int:site_id>/', views.view_marche, name='view_marche'),
     path('marche/edit/<int:site_id>/', views.edit_marche, name='edit_marche'),
     path('marche/add/<int:site_id>/', views.add_marche, name='add_marche'),
+    path('marcheUni/edit/<int:marche_id>/<int:site_id>', views.edit_mar, name='edit_mar'),
+    path('marcheUni/delete/<int:marche_id>/<int:site_id>', views.delete_mar, name='delete_mar'),
+    path('marcheUni/deleteok/<int:marche_id>/<int:site_id>', views.delete_marok, name='delete_marok'),
 
     #Rapport Génération
     path('rapport/', views.rapport, name='rapport'),

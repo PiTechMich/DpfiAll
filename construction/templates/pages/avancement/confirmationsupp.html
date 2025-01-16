@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block picontent %}
-<h1>Avancements pour le site : {{ site.nomEtab }}</h1>
+<h1>Voulez vous Vraiment Faire la suppression de l' Avancements pour le site : {{ site.nomEtab }}</h1>
 <h6>Objet : {{ site.objet }}</h6>
 <h6>Localite -- Region : {{ site.commune.district.region.name }} -- District : {{ site.commune.district.name }} -- Commune {{ site.commune.name }}</h6>
 <h6>Numéro Marché :{{ marche.numMarche }}</h6>
@@ -10,6 +10,7 @@
 <h6>Financement : {{ marche.financement }}</h6>
 <h6>OS : {{ marche.os }}</h6>
 <h6>Titulaire : {{ marche.Titulaire }} {{ marche.numTitulaire }}</h6>
+<h1>Voulez vous Vraiment Faire la suppression de cet Avancement </h1>
 <table class="table-bordered">
     <thead>
         <tr>
@@ -19,11 +20,10 @@
             <th>Observation</th>
             <th>Statut (Anterieurs)</th>
             <th>Photos</th>
-            <th>Action</th>
+
         </tr>
     </thead>
     <tbody>
-        {% for avancement in avancements %}
         <tr>
             <td>{{ avancement.create_on }}</td>
             <td>{{ avancement.etat }}</td>
@@ -36,12 +36,12 @@
                 {% if avancement.photo3 %}<img src="{{ avancement.photo3.url }}" width="50">{% endif %}
                 {% if avancement.photo4 %}<img src="{{ avancement.photo4.url }}" width="50">{% endif %}
             </td>
-            <td><a href="{% url 'edit_avan' avan_id=avancement.id site_id=avancement.site.id %}" class="btn btn-success btn-sm">Modifier</a>
-                <a href="{% url 'delete_avan' avan_id=avancement.id site_id=avancement.site.id %}" class="btn btn-success btn-sm">Supprimer</a>
-            </td>
         </tr>
-        {% endfor %}
     </tbody>
 </table>
-<a href="{% url 'add_avancement' site.id %}" class="btn btn-success">Ajouter Avancement</a>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <a href="{% url 'delete_avanok' avan_id=avancement.id site_id=avancement.site.id %}" class="btn btn-danger btn-sm">Oui, Supprimer</a>
+</form>
+<a href="{% url 'view_avancement' site_id=avancement.site.id %}" class="btn btn-success btn-sm">Annuler</a>
 {% endblock %}

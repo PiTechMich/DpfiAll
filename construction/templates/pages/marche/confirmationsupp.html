@@ -21,6 +21,7 @@
         {% if avancement.photo4 %}<img src="{{ avancement.photo4.url }}" width="50">{% endif %}
     </td>
 </table>
+<h1>Voulez vous Vraiment Faire la suppression de ce Marché </h1>
 <table class="table table-bordered border-primary">
     <thead>
         <tr>
@@ -32,11 +33,9 @@
             <th>OS</th>
             <th>Titulaire</th>
             <th>Delai d'Exécution</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        {% for marche in marches %}
         <tr>
             <td>{{ marche.numMarche }}</td>
             <td>{{ marche.NbSalle }}</td>
@@ -46,12 +45,13 @@
             <td>{{ marche.os }}</td>
             <td>{{ marche.Titulaire }} {{ marche.numTitulaire }}</td>
             <td>{{ marche.delaiEx }}</td>
-            <td><a href="{% url 'edit_mar' marche_id=marche.id site_id=site.id %}" class="btn btn-success btn-sm">Modifier</a>
-                <a href="{% url 'delete_mar' marche_id=marche.id site_id=site.id %}" class="btn btn-success btn-sm">Supprimer</a>
-            </td>
         </tr>
-        {% endfor %}
+
     </tbody>
 </table>
-<a href="{% url 'add_marche' site.id %}" class="btn btn-success">Ajouter Marche</a>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <a href="{% url 'delete_marok' marche_id=marche.id site_id=site.id %}" class="btn btn-danger btn-sm">Oui, Supprimer</a>
+</form>
+<a href="{% url 'view_marche' site_id=site.id %}" class="btn btn-success btn-sm">Annuler</a>
 {% endblock %}

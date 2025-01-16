@@ -26,12 +26,14 @@ class AvancementForm(forms.ModelForm):
             'photo2',
             'photo3',
             'photo4',
-            'site'
+            'site',
+            'n_stat'
         ]
         widgets = {
             'etat': forms.Select(attrs={'class': 'form-control'}),
             'avancement': forms.TextInput(attrs={'class': 'form-control'}),     
             'inaugurable': forms.Select(attrs={'class': 'form-control'}),
+            'n_stat': forms.Select(attrs={'class': 'form-control'}),
         }
     def __init__(self, *args, **kwargs):
             super(AvancementForm, self).__init__(*args, **kwargs)

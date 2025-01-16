@@ -522,9 +522,8 @@ def edit_avancement(request, site_id):
     avancement = Avancement.objects.filter(site_id=site_id).order_by('-create_on').first()
         
     if request.method =='POST':
-        
         form = AvancementForm(request.POST, request.FILES, instance=avancement)
-        print(form)
+        #print(form)
         if form.is_valid():
             print("je suis ici")
             form.save()
@@ -533,7 +532,37 @@ def edit_avancement(request, site_id):
         
         form = AvancementForm(instance=avancement)
     return render(request, 'pages/avancement/edit.html', {'form': form})
+# Modification Avancement selon Avancement
+def edit_avan(request, avan_id,site_id):
+    #avancement = Avancement.objects.filter(site_id=site_id).order_by('-create_on').first()
+    pi = Avancement.objects.get(pk=avan_id) 
+    if request.method =='POST':
+        
+        form = AvancementForm(request.POST, request.FILES, instance=pi)
+        #print(form)
+        if form.is_valid():
+            print("je suis ici")
+            form.save()
+            return redirect('view_avancement', site_id=site_id)
+    else:
+        form = AvancementForm(instance=pi)
+    return render(request, 'pages/avancement/edit.html', {'form': form})
 
+def delete_avanok(request, avan_id,site_id):
+    pi = Avancement.objects.get(pk=avan_id)
+    pi.delete()
+    return redirect('view_avancement', site_id=site_id)
+  
+def delete_avan(request, avan_id,site_id):
+    site = get_object_or_404(Site, id=site_id)
+    avancement = Avancement.objects.get(pk=avan_id)
+    marche = Marche.objects.filter(site=site).order_by('-create_on').first()
+    if request.method == 'POST' : 
+        pi = Avancement.objects.get(pk=avan_id)
+        pi.delete()
+        return redirect('view_avancement', site_id=site_id)
+  
+    return render(request, 'pages/avancement/confirmationsupp.html', {'site': site, 'avancement': avancement,"marche":marche})
 # Ajouter un nouvel avancement
 def add_avancement(request, site_id):
     site = get_object_or_404(Site, id=site_id)
@@ -597,6 +626,38 @@ def add_marche(request, site_id):
     else:
         form = MarcheForm(initial={'site': Site.objects.get(id=site_id)})
     return render(request, 'pages/marche/add.html', {'form': form, 'site': site})
+
+# Modification Avancement selon Avancement
+def edit_mar(request, marche_id,site_id):
+    #avancement = Avancement.objects.filter(site_id=site_id).order_by('-create_on').first()
+    pi = Marche.objects.get(pk=marche_id) 
+    if request.method =='POST':
+        
+        form =MarcheForm(request.POST, request.FILES, instance=pi)
+        #print(form)
+        if form.is_valid():
+            print("je suis ici")
+            form.save()
+            return redirect('view_marche', site_id=site_id)
+    else:
+        form = MarcheForm(instance=pi)
+    return render(request, 'pages/marche/edit.html', {'form': form})
+
+def delete_marok(request, marche_id,site_id):
+    pi = Marche.objects.get(pk=marche_id)
+    pi.delete()
+    return redirect('view_marche', site_id=site_id)
+  
+def delete_mar(request, marche_id,site_id):
+    site = get_object_or_404(Site, id=site_id)
+    marche = Marche.objects.get(pk=marche_id)
+    avancement = Avancement.objects.filter(site=site).order_by('-create_on').first()
+    if request.method == 'POST' : 
+        pi = Avancement.objects.get(pk=marche_id)
+        pi.delete()
+        return redirect('view_marche', site_id=site_id)
+  
+    return render(request, 'pages/marche/confirmationsupp.html', {'site': site, 'avancement': avancement,"marche":marche})
 
 
 def rapport(request):
@@ -977,7 +1038,9 @@ def modifier_statut_conge(request, conge_id):
 def liste_constructions(request):
     form = FiltreConstruction(request.GET)
     #queryset = Marche.objects.all()
-    queryset = Avancement.objects.all()
+    queryset = Avancement.objects.filter(
+        n_stat='O'
+        )
     if form.is_valid():
         # Construire des conditions Q dynamiques
         filter_conditions = Q()

@@ -61,7 +61,7 @@ class Site(models.Model):
 # Marche
 class Marche(models.Model):
     numMarche =models.CharField(max_length=255,null=True)
-    NbSalle =models.CharField(max_length=10)
+    NbSalle =models.IntegerField(max_length=10)
     Titulaire =models.CharField(max_length=255,null=True)
     NumTitulaire=models.CharField(max_length=50,null=True)
     delaiEx=models.CharField(max_length=50,null=True)
@@ -129,6 +129,16 @@ class Avancement(models.Model):
         validators=[MinValueValidator(0), MaxValueValidator(100)],
         help_text="Avancement en pourcentage (0 à 100)"
     )
+    typeStat = [
+        ('O', 'Oui'),
+        ('N', 'Non')
+    ]
+    n_stat=models.CharField(
+        max_length=2,
+        choices=typeStat,
+        default='O'
+        )
+    
     observation = models.TextField(null=True, blank=True)
     annee_achevement = models.CharField(
         max_length=10,
