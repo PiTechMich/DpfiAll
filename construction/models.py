@@ -31,6 +31,9 @@ class Commune(models.Model):
     district=models.ForeignKey('District', on_delete=models.CASCADE,db_index=True)
     create_on=models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['district__region__province__name','district__region__name','district__region__district__name']  # Trier par date d'embauche (croissant)
+
     def __str__(self):
         return f"Province de  {self.district.region.province.name} Region de : {self.district.region.name} District de : {self.district.name} Commune de : {self.name}"
 
@@ -237,3 +240,45 @@ class Conge(models.Model):
 
     def __str__(self):
         return f"{self.utilisateur.nom} - {self.type_conge.nom} ({self.annee} : {self.date_debut} à {self.date_fin})"
+    
+# Corps et grade
+
+class CorpsGrade(models.Model):
+    indice = models.CharField(max_length=10)
+    corps = models.CharField(max_length=100)
+    grade = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"{self.indice} - {self.corps} {self.grade}"
+
+class Carriere(models.Model):
+
+    indice = models.ForeignKey(CorpsGrade, on_delete=models.CASCADE)
+    personnel = models.ForeignKey(Personnel, on_delete=models.CASCADE)
+    date_debut = models.DateField(null=True, blank=True)
+    create_on=models.DateTimeField(auto_now_add=True)
+    fond = models.FileField(null=True, blank=True, upload_to='fondCariere/')
+    class Meta:
+        ordering = ['personnel__nom','-date_debut']  # Trier par date d'embauche (croissant)
+
+    def __str__(self):
+        return f"{self.personnel.im} - {self.personnel.nom} {self.personnel.prenom}( {self.indice.indice} {self.indice.corps} {self.indice.grade}) "
+
+class OM(models.Model):
+
+    personnel = models.ForeignKey(Personnel, on_delete=models.CASCADE)
+    lieu = models.CharField(max_length=255)
+    dureedep = models.PositiveIntegerField()
+    ref = models.CharField(null=True, blank=True,max_length=255)
+    moyendep = models.CharField(max_length=255)
+    motif = models.TextField()
+    datedep = models.DateField(null=True, blank=True)
+    financement = models.CharField(max_length=255,null=True, blank=True)
+    create_on=models.DateTimeField(auto_now_add=True)
+    fondOM = models.FileField(null=True, blank=True, upload_to='fondOM/')
+    fondOR = models.FileField(null=True, blank=True, upload_to='fondOR/')
+    class Meta:
+        ordering = ['-datedep','personnel__nom']  
+
+    def __str__(self):
+        return f"{self.ref or 'OM'} {self.personnel.im} - {self.personnel.nom} {self.personnel.prenom}( {self.lieu} {self.dureedep} {self.datedep}) "

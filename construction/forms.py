@@ -29,6 +29,7 @@ class AvancementForm(forms.ModelForm):
             'site',
             'n_stat'
         ]
+        labels = {'n_stat':'Statut Actuel ???'}
         widgets = {
             'etat': forms.Select(attrs={'class': 'form-control'}),
             'avancement': forms.TextInput(attrs={'class': 'form-control'}),     
@@ -187,3 +188,14 @@ class FiltreConstruction(forms.Form):
         nbrSalle_distincts = [f for f in nbrSalle_distincts if f is not None]
         # Définir les choix pour le champ NbSalle
         self.fields['NbSalle'].choices = [(str(f), str(f)) for f in nbrSalle_distincts]
+
+class OMForm(forms.ModelForm):
+    personnels = forms.ModelMultipleChoiceField(
+        queryset=Personnel.objects.all(),
+        widget=forms.CheckboxSelectMultiple,  # Liste de cases à cocher
+        label="Sélectionnez les personnels"
+    )
+
+    class Meta:
+        model = OM
+        fields = ['personnels', 'lieu', 'dureedep', 'moyendep', 'motif', 'datedep', 'financement', 'fondOM', 'fondOR']

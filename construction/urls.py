@@ -51,4 +51,8 @@ urlpatterns = [
     path('login/', views.CustomLoginView.as_view(), name='login'),
 
     path('logout/', views.logout_view, name='logout'),
+    path('omadd/', views.creer_om, name='omadd'),
+    path('liste-om/', views.liste_om, name='liste_om'),
+    path('modifier-om/<int:om_id>/', views.modifier_om, name='modifier_om'),
+    path('supprimer-om/<int:om_id>/', views.supprimer_om, name='supprimer_om'),
 ]

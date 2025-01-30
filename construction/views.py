@@ -305,11 +305,11 @@ def export_to_excel(request):
         "District", 
         "Commune",
         "Fokontany",
+        "Numéro Marché",
         "Objet",
+        "NbreSalle",
         "Nom Etablissement",
         "TypeEtab",
-        "NumMarche",
-        "NbreSalle",
         "Titulaire",
         "Num Titulaire",
         "Delai Execution",
@@ -364,11 +364,11 @@ def export_to_excel(request):
             site.commune.district.name,
             site.commune.name,
             site.fokontany,
+            latest_marche.numMarche,
             site.objet,
+            latest_marche.NbSalle,
             site.nomEtab,
             site.TypeEtab,
-            latest_marche.numMarche,
-            latest_marche.NbSalle,
             latest_marche.Titulaire,
             latest_marche.NumTitulaire,
             latest_marche.delaiEx,
@@ -677,7 +677,8 @@ def rapport(request):
         # )
         
         avancements = Avancement.objects.filter(
-        site__commune__district__region__province=province
+        site__commune__district__region__province=province,
+        n_stat='O'
         )
 
         if etat:
@@ -690,7 +691,7 @@ def rapport(request):
             avancements = avancements.filter(site__marche__financement=financement)
         
         # Trier les résultats par ordre croissant des régions
-        avancements = avancements.order_by('site__commune__district__region__name')
+        avancements = avancements.order_by('site__commune__district__region__name','site__commune__district__name')
         #Prendre elément concernant site selon recherche
           # Sous-requête pour obtenir le dernier "Marche" pour chaque "Site"
         
@@ -1123,3 +1124,38 @@ class CustomLogoutView(LogoutView):
     def dispatch(self, request, *args, **kwargs):
         messages.success(request, "Vous avez été déconnecté avec succès !")
         return super().dispatch(request, *args, **kwargs)
+    
+def creer_om(request):
+    if request.method == 'POST':
+        form = OMForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('liste_om')  # Rediriger vers la liste des OM
+    else:
+        form = OMForm()
+    
+    return render(request, 'pages/om/creer_om.html', {'form': form})
+
+def liste_om(request):
+    ordres_mission = OM.objects.all()
+    return render(request, 'pages/om/liste_om.html', {'ordres_mission': ordres_mission})
+
+def modifier_om(request, om_id):
+    om = get_object_or_404(OM, id=om_id)  # Récupère l'OM ou renvoie une erreur 404
+    if request.method == 'POST':
+        form = OMForm(request.POST, request.FILES, instance=om)
+        if form.is_valid():
+            form.save()
+            return redirect('liste_om')  # Redirige vers la liste après modification
+    else:
+        form = OMForm(instance=om)
+
+    return render(request, 'pages/om/modifier_om.html', {'form': form, 'om': om})
+
+def supprimer_om(request, om_id):
+    om = get_object_or_404(OM, id=om_id)
+    if request.method == 'POST':
+        om.delete()
+        return redirect('liste_om')  # Redirige après suppression
+
+    return render(request, 'pages/om/supprimer_om.html', {'om': om})

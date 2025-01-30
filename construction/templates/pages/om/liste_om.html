@@ -1,0 +1,45 @@
+{% extends 'index.html' %}
+
+{% block picontent %}
+  <h2>Liste des Ordres de Mission</h2>
+  
+  <a href="{% url 'omadd' %}" class="btn btn-primary">Créer un OM</a>
+  
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Référence</th>
+        <th>Personnel(s)</th>
+        <th>Lieu</th>
+        <th>Durée (jours)</th>
+        <th>Moyen de déplacement</th>
+        <th>Date de départ</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for om in ordres_mission %}
+        <tr>
+          <td>{{ om.ref|default:"N/A" }}</td>
+          <td>
+            {% for p in om.personnels.all %}
+              {{ p.nom }} {{ p.prenom }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </td>
+          <td>{{ om.lieu }}</td>
+          <td>{{ om.dureedep }}</td>
+          <td>{{ om.moyendep }}</td>
+          <td>{{ om.datedep|date:"d/m/Y" }}</td>
+          <td>
+            <a href="{% url 'modifier_om' om.id %}" class="btn btn-warning">Modifier</a>
+            <a href="{% url 'supprimer_om' om.id %}" class="btn btn-danger" onclick="return confirm('Voulez-vous supprimer cet OM ?')">Supprimer</a>
+          </td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="7">Aucun Ordre de Mission trouvé.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+
+{% block picontent %}
+  <h2>Modifier l'Ordre de Mission {{ om.ref }}</h2>
+  
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+  </form>
+
+  <a href="{% url 'liste_om' %}" class="btn btn-secondary">Annuler</a>
+{% endblock %}
